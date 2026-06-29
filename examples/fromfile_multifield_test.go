@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"strconv"
 
-	. "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework"
 	"github.com/gloo-foo/framework/patterns"
+
+	awk "github.com/gloo-foo/cmd-awk"
 )
 
 // studentScoreProgram calculates average score per student
 type studentScoreProgram struct {
-	SimpleProgram
+	awk.SimpleProgram
 }
 
-func (p studentScoreProgram) Action(ctx *Context) (string, bool) {
+func (p studentScoreProgram) Action(ctx *awk.Context) (string, bool) {
 	name := ctx.Field(1)
 	var sum float64
 	var count int
@@ -38,7 +39,7 @@ func (p studentScoreProgram) Action(ctx *Context) (string, bool) {
 func ExampleAwk_fromFile_studentAverage() {
 	// cat testdata/scores.txt | awk '{print $1": "($2+$3+$4)/3}'
 	patterns.MustRun(
-		Awk(
+		awk.Awk(
 			studentScoreProgram{},
 			gloo.File("testdata/scores.txt"),
 		),

@@ -5,9 +5,10 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/gloo-foo/testable"
+
 	awk "github.com/gloo-foo/cmd-awk"
 	alias "github.com/gloo-foo/cmd-awk/alias"
-	"github.com/gloo-foo/testable"
 )
 
 // The alias package re-exports the constructor and flag types under unprefixed

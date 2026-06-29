@@ -3,21 +3,22 @@ package awk_test
 import (
 	"strings"
 
-	. "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework"
 	"github.com/gloo-foo/framework/patterns"
+
+	awk "github.com/gloo-foo/cmd-awk"
 )
 
 // logErrorFilterProgram filters log entries by level
 type logErrorFilterProgram struct {
-	SimpleProgram
+	awk.SimpleProgram
 }
 
-func (p logErrorFilterProgram) Condition(ctx *Context) bool {
+func (p logErrorFilterProgram) Condition(ctx *awk.Context) bool {
 	return strings.Contains(ctx.Field(0), "ERROR")
 }
 
-func (p logErrorFilterProgram) Action(ctx *Context) (string, bool) {
+func (p logErrorFilterProgram) Action(ctx *awk.Context) (string, bool) {
 	return ctx.Field(0), true
 }
 
@@ -25,7 +26,7 @@ func (p logErrorFilterProgram) Action(ctx *Context) (string, bool) {
 func ExampleAwk_fromFile_logErrors() {
 	// cat testdata/log_entries.txt | awk '/ERROR/'
 	patterns.MustRun(
-		Awk(
+		awk.Awk(
 			logErrorFilterProgram{},
 			gloo.File("testdata/log_entries.txt"),
 		),

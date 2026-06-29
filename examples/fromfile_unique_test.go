@@ -1,16 +1,17 @@
 package awk_test
 
 import (
-	. "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework"
 	"github.com/gloo-foo/framework/patterns"
+
+	awk "github.com/gloo-foo/cmd-awk"
 )
 
 // This example demonstrates removing duplicate lines from a file
 func ExampleAwk_fromFile_uniqueLines() {
 	// cat testdata/duplicates.txt | awk '!seen[$0]++'
 	patterns.MustRun(
-		Awk(
+		awk.Awk(
 			uniqueLinesProgram{},
 			gloo.File("testdata/duplicates.txt"),
 		),

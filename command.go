@@ -12,9 +12,9 @@ import (
 // awkConfig is the immutable per-construction configuration of an Awk command:
 // the resolved field separators and a private copy of the initial variables.
 type awkConfig struct {
+	vars map[string]any
 	fs   string
 	ofs  string
-	vars map[string]any
 }
 
 // defaultSeparator is awk's default field/output separator (a single space).
@@ -78,7 +78,14 @@ func Awk(program Program, opts ...any) gloo.Command[[]byte, []byte] {
 
 // run executes one pipeline pass: it resolves the input source, runs the Begin
 // phase, maps each line through the program, and appends any End output.
-func run(ctx context.Context, program Program, cfg awkConfig, params gloo.Parameters[gloo.File, flags], selfSourced bool, input gloo.Stream[[]byte]) gloo.Stream[[]byte] {
+func run(
+	ctx context.Context,
+	program Program,
+	cfg awkConfig,
+	params gloo.Parameters[gloo.File, flags],
+	selfSourced bool,
+	input gloo.Stream[[]byte],
+) gloo.Stream[[]byte] {
 	input, err := resolveSource(ctx, params, selfSourced, input)
 	if err != nil {
 		return errStream(ctx, input, err)
@@ -95,7 +102,12 @@ func run(ctx context.Context, program Program, cfg awkConfig, params gloo.Parame
 // command is self-sourced from positional inputs it replaces the upstream
 // stream with a reader over those inputs; otherwise the upstream is returned
 // unchanged.
-func resolveSource(ctx context.Context, params gloo.Parameters[gloo.File, flags], selfSourced bool, input gloo.Stream[[]byte]) (gloo.Stream[[]byte], error) {
+func resolveSource(
+	ctx context.Context,
+	params gloo.Parameters[gloo.File, flags],
+	selfSourced bool,
+	input gloo.Stream[[]byte],
+) (gloo.Stream[[]byte], error) {
 	if !selfSourced {
 		return input, nil
 	}

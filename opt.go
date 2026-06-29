@@ -6,14 +6,14 @@ type (
 )
 
 type AwkVariable struct {
-	Name  string
 	Value any
+	Name  string
 }
 
 type flags struct {
+	variables            map[string]any
 	fieldSeparator       AwkFieldSeparator
 	outputFieldSeparator AwkOutputFieldSeparator
-	variables            map[string]any
 }
 
 func (f AwkFieldSeparator) Configure(flags *flags)       { flags.fieldSeparator = f }

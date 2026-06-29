@@ -1,9 +1,10 @@
 package awk_test
 
 import (
-	. "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework"
 	"github.com/gloo-foo/framework/patterns"
+
+	awk "github.com/gloo-foo/cmd-awk"
 )
 
 // This example demonstrates adding line numbers to file content
@@ -11,7 +12,7 @@ import (
 func ExampleAwk_fromFile_lineNumbers() {
 	// cat testdata/fruits.txt | awk '{print NR": "$0}'
 	patterns.MustRun(
-		Awk(
+		awk.Awk(
 			lineNumberProgram{},
 			gloo.File("testdata/fruits.txt"),
 		),

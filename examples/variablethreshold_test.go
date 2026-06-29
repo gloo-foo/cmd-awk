@@ -4,18 +4,19 @@ import (
 	"strconv"
 	"strings"
 
-	. "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework/patterns"
+
+	awk "github.com/gloo-foo/cmd-awk"
 )
 
 // variableThresholdProgram demonstrates using initialized variables.
 // Pass variables at initialization with Variable{Name, Value} to make
 // your programs reusable with different parameters.
 type variableThresholdProgram struct {
-	SimpleProgram
+	awk.SimpleProgram
 }
 
-func (p variableThresholdProgram) Condition(ctx *Context) bool {
+func (p variableThresholdProgram) Condition(ctx *awk.Context) bool {
 	threshold := ctx.Var("threshold").(int)
 	if val, err := strconv.Atoi(ctx.Field(1)); err == nil {
 		return val > threshold
@@ -23,16 +24,16 @@ func (p variableThresholdProgram) Condition(ctx *Context) bool {
 	return false
 }
 
-func (p variableThresholdProgram) Action(ctx *Context) (string, bool) {
+func (p variableThresholdProgram) Action(ctx *awk.Context) (string, bool) {
 	return ctx.Field(0), true
 }
 
 func ExampleAwk_variableThreshold() {
 	// echo -e "10\n25\n30\n15" | awk -v threshold=20 '$1>threshold'
 	gloo.MustRun(
-		Awk(
+		awk.Awk(
 			variableThresholdProgram{},
-			AwkVariable{Name: "threshold", Value: 20},
+			awk.AwkVariable{Name: "threshold", Value: 20},
 			strings.NewReader("10\n25\n30\n15"),
 		),
 	)

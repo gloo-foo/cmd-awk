@@ -7,28 +7,13 @@ import (
 
 // Context provides access to awk's execution context for each line
 type Context struct {
-	// Fields contains the split fields from the current line
-	// Fields[0] is $0 (the whole line)
-	// Fields[1] is $1 (first field), etc.
-	Fields []string
-
-	// NR is the current record (line) number (1-based)
-	NR int64
-
-	// NF is the number of fields in the current record
-	NF int
-
-	// FS is the input field separator
-	FS string
-
-	// OFS is the output field separator (used when printing multiple fields)
-	OFS string
-
-	// Variables allows access to user-defined variables
 	Variables map[string]any
-
-	// RS is the record separator (usually newline)
-	RS string
+	FS        string
+	OFS       string
+	RS        string
+	Fields    []string
+	NR        int64
+	NF        int
 }
 
 // Field returns the field at the given index (0 = whole line, 1 = first field, etc.)

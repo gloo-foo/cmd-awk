@@ -6,9 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	command "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework"
 	"github.com/gloo-foo/testable"
+
+	command "github.com/gloo-foo/cmd-awk"
 )
 
 // errBoom is the sentinel the failing test programs emit, so error propagation

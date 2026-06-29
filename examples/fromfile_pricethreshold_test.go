@@ -4,25 +4,26 @@ import (
 	"fmt"
 	"strconv"
 
-	. "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework"
 	"github.com/gloo-foo/framework/patterns"
+
+	awk "github.com/gloo-foo/cmd-awk"
 )
 
 // priceFilterProgram filters items by price threshold
 type priceFilterProgram struct {
-	SimpleProgram
+	awk.SimpleProgram
 	threshold float64
 }
 
-func (p priceFilterProgram) Condition(ctx *Context) bool {
+func (p priceFilterProgram) Condition(ctx *awk.Context) bool {
 	if price, err := strconv.ParseFloat(ctx.Field(2), 64); err == nil {
 		return price >= p.threshold
 	}
 	return false
 }
 
-func (p priceFilterProgram) Action(ctx *Context) (string, bool) {
+func (p priceFilterProgram) Action(ctx *awk.Context) (string, bool) {
 	return fmt.Sprintf("%s costs $%s", ctx.Field(1), ctx.Field(2)), true
 }
 
@@ -30,7 +31,7 @@ func (p priceFilterProgram) Action(ctx *Context) (string, bool) {
 func ExampleAwk_fromFile_priceThreshold() {
 	// cat testdata/prices.txt | awk '$2 >= 2.00 {print $1" costs $"$2}'
 	patterns.MustRun(
-		Awk(
+		awk.Awk(
 			priceFilterProgram{threshold: 2.00},
 			gloo.File("testdata/prices.txt"),
 		),

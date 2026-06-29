@@ -3,23 +3,24 @@ package awk_test
 import (
 	"strings"
 
-	. "github.com/gloo-foo/cmd-awk"
 	gloo "github.com/gloo-foo/framework/patterns"
+
+	awk "github.com/gloo-foo/cmd-awk"
 )
 
 // uniqueLinesProgram demonstrates deduplication using variables.
 // This advanced example shows how to maintain state across lines using
 // ctx.SetVar/Var and Go's native data structures like maps.
 type uniqueLinesProgram struct {
-	SimpleProgram
+	awk.SimpleProgram
 }
 
-func (p uniqueLinesProgram) Begin(ctx *Context) error {
+func (p uniqueLinesProgram) Begin(ctx *awk.Context) error {
 	ctx.SetVar("seen", make(map[string]bool))
 	return nil
 }
 
-func (p uniqueLinesProgram) Condition(ctx *Context) bool {
+func (p uniqueLinesProgram) Condition(ctx *awk.Context) bool {
 	seen := ctx.Var("seen").(map[string]bool)
 	line := ctx.Field(0)
 	if seen[line] {
@@ -29,14 +30,14 @@ func (p uniqueLinesProgram) Condition(ctx *Context) bool {
 	return true
 }
 
-func (p uniqueLinesProgram) Action(ctx *Context) (string, bool) {
+func (p uniqueLinesProgram) Action(ctx *awk.Context) (string, bool) {
 	return ctx.Field(0), true
 }
 
 func ExampleAwk_uniqueLines() {
 	// echo -e "apple\nbanana\napple\ncherry\nbanana" | awk '!seen[$0]++'
 	gloo.MustRun(
-		Awk(
+		awk.Awk(
 			uniqueLinesProgram{},
 			strings.NewReader("apple\nbanana\napple\ncherry\nbanana"),
 		),
